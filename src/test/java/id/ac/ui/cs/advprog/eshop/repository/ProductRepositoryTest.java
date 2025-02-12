@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 
@@ -125,6 +126,6 @@ class ProductRepositoryTest {
         productRepository.delete("e446dadb-898f-405c-8c17-3ab21e0cd863");
 
         Product foundProduct = productRepository.findid("e446dadb-898f-405c-8c17-3ab21e0cd863");
-        assertNotNull(foundProduct);
+        assertNull(foundProduct);
     }
 }
