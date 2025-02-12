@@ -7,5 +7,5 @@ import lombok.Getter;
 public class Product {
     private int productQuantity;
     private String productName;
-    private int productId;
+    private String productId;
 }
