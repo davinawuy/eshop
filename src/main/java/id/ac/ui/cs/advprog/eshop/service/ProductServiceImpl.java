@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findid(int productId) {
+    public Product findid(String productId) {
         return productRepository.findid(productId);
     }
 
