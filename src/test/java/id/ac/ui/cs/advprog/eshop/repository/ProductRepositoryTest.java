@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 
@@ -69,6 +68,38 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testFindidExisting() {
+        Product product = new Product();
+        product.setProductId("1234");
+        product.setProductName("Test Product");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        Product found = productRepository.findid("1234");
+        assertNotNull(found);
+        assertEquals("Test Product", found.getProductName());
+        assertEquals(10, found.getProductQuantity());
+    }
+
+    @Test
+    void testFindidNotFound() {
+        Product found = productRepository.findid("non-existent-id");
+        assertNull(found);
+    }
+
+    @Test
+    void testFindidNotFoundInNonEmptyRepository() {
+        Product product = new Product();
+        product.setProductId("1");
+        product.setProductName("Product 1");
+        product.setProductQuantity(10);
+        productRepository.create(product);
+
+        Product found = productRepository.findid("2");
+        assertNull(found);
+    }
+
+    @Test
     void testUpdateProductPositive() {
         Product product = new Product();
         product.setProductId("bdde26d8-6b99-4d4a-ba75-15274a410fc1");
@@ -102,6 +133,23 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void testUpdateProductNonexistentInNonEmptyRepo() {
+        Product product = new Product();
+        product.setProductId("8568c5db-7728-457f-a249-12dd51af8d76");
+        product.setProductName("Existing Product");
+        product.setProductQuantity(5);
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("ac693967-7482-4905-b69c-2a33eb567143");
+        updatedProduct.setProductName("Updated Product");
+        updatedProduct.setProductQuantity(10);
+
+        Product result = productRepository.update(updatedProduct);
+        assertNull(result);
+    }
+
+    @Test
     void testDeleteProductPositive() {
         Product product = new Product();
         product.setProductId("c27c7975-219a-43ba-90c6-d1d2026a0c07");
@@ -110,7 +158,6 @@ class ProductRepositoryTest {
         productRepository.create(product);
 
         productRepository.delete("c27c7975-219a-43ba-90c6-d1d2026a0c07");
-
         Product foundProduct = productRepository.findid("c27c7975-219a-43ba-90c6-d1d2026a0c07");
         assertNull(foundProduct);
     }
@@ -124,7 +171,6 @@ class ProductRepositoryTest {
         productRepository.create(product);
 
         productRepository.delete("e446dadb-898f-405c-8c17-3ab21e0cd863");
-
         Product foundProduct = productRepository.findid("e446dadb-898f-405c-8c17-3ab21e0cd863");
         assertNull(foundProduct);
     }
