@@ -19,6 +19,9 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        // This setup method is intentionally left empty.
+        // The repository is already properly initialized via @InjectMocks.
+        // No additional initialization is required for these tests.
     }
 
     @Test
