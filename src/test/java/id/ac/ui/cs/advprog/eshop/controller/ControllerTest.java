@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
-public class ControllerTest {
+ class ControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -23,7 +23,7 @@ public class ControllerTest {
     private ProductService service;
 
     @Test
-    public void testCreateProductPage() throws Exception {
+     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("CreateProduct"))
@@ -31,7 +31,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testCreateProductPost() throws Exception {
+     void testCreateProductPost() throws Exception {
         mockMvc.perform(post("/product/create")
                         .param("productName", "Test Product")
                         .param("productQuantity", "10"))
@@ -42,7 +42,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testProductListPage() throws Exception {
+     void testProductListPage() throws Exception {
         Product product1 = new Product();
         product1.setProductId(UUID.randomUUID().toString());
         product1.setProductName("Product One");
@@ -62,7 +62,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testDeleteProduct() throws Exception {
+     void testDeleteProduct() throws Exception {
         String id = UUID.randomUUID().toString();
 
         mockMvc.perform(get("/product/delete/{id}", id))
@@ -73,7 +73,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testEditProductPage() throws Exception {
+     void testEditProductPage() throws Exception {
         String id = UUID.randomUUID().toString();
         Product product = new Product();
         product.setProductId(id);
@@ -89,7 +89,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void testEditProductPost() throws Exception {
+     void testEditProductPost() throws Exception {
         mockMvc.perform(post("/product/edit")
                         .param("productId", UUID.randomUUID().toString())
                         .param("productName", "Updated Product")

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ServiceimpelTest {
+ class ServiceimpelTest {
 
     @Mock
     private ProductRepository productRepository;
@@ -24,7 +24,7 @@ public class ServiceimpelTest {
     private ProductServiceImpl productService;
 
     @Test
-    public void testCreate() {
+     void testCreate() {
         Product product = new Product();
         product.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
         product.setProductName("Test Product");
@@ -38,7 +38,7 @@ public class ServiceimpelTest {
     }
 
     @Test
-    public void testFindAll() {
+     void testFindAll() {
         Product product1 = new Product();
         product1.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
         product1.setProductName("Product One");
@@ -63,14 +63,14 @@ public class ServiceimpelTest {
     }
 
     @Test
-    public void testDelete() {
+     void testDelete() {
         String productId = "fa139fd2-82c1-43f9-9826-943b2b8691a1";
         productService.delete(productId);
         verify(productRepository, times(1)).delete(productId);
     }
 
     @Test
-    public void testFindidFound() {
+     void testFindidFound() {
         String productId = "fa139fd2-82c1-43f9-9826-943b2b8691a1";
         Product product = new Product();
         product.setProductId(productId);
@@ -87,7 +87,7 @@ public class ServiceimpelTest {
     }
 
     @Test
-    public void testFindidNotFound() {
+     void testFindidNotFound() {
         String productId = "non-existent";
         when(productRepository.findid(productId)).thenReturn(null);
 
@@ -97,7 +97,7 @@ public class ServiceimpelTest {
     }
 
     @Test
-    public void testUpdate() {
+     void testUpdate() {
         Product original = new Product();
         original.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
         original.setProductName("Old Name");
