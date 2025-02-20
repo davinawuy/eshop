@@ -1,17 +1,14 @@
 plugins {
     java
     jacoco
-    id("org.springframework.boot") version "3.4.2"
-    id("io.spring.dependency-management") version "1.1.7"
-    id("org.sonarqube") version "6.0.1.5171"
+    id("org.springframework.boot") version libs.versions.springBoot.get()
+    id("io.spring.dependency-management") version libs.versions.dependencyManagement.get()
+    id("org.sonarqube") version libs.versions.sonarqube.get()
 }
 
 group = "id.ac.ui.cs.advprog"
 version = "0.0.1-SNAPSHOT"
 
-val seleniumJavaVersion = "4.14.1"
-val seleniumJupiterVersion = "5.0.1"
-val webdrivermanagerVersion = "5.6.3"
 
 java {
     toolchain {
@@ -37,9 +34,9 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.14.1")
-    testImplementation("io.github.bonigarcia:selenium-jupiter:5.0.1")
-    testImplementation("io.github.bonigarcia:webdrivermanager:5.6.3")
+    testImplementation("org.seleniumhq.selenium:selenium-java:${libs.versions.seleniumJava.get()}")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:${libs.versions.seleniumJupiter.get()}")
+    testImplementation("io.github.bonigarcia:webdrivermanager:${libs.versions.webdrivermanager.get()}")
     testImplementation("org.junit.jupiter:junit-jupiter")
 
 }
@@ -73,6 +70,9 @@ tasks.test  {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+    reports {
+        xml.required = true
+    }
 }
 
 tasks.withType<Test>().configureEach {
@@ -84,5 +84,6 @@ sonar {
         property("sonar.projectKey", "davinawuy_eshop")
         property("sonar.organization", "davinawuy")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
