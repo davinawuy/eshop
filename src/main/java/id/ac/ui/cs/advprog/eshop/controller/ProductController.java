@@ -14,8 +14,12 @@ import java.util.UUID;
 @RequestMapping("/product")
 public class ProductController {
 
+    private final ProductService service;
+
     @Autowired
-    private ProductService service;
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
 
     @GetMapping("/create")
     public String createProductPage(Model model) {
@@ -51,7 +55,6 @@ public class ProductController {
         return "editProduct";
     }
 
-    // Process the edit product form submission
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product, Model model) {
         service.update(product);
