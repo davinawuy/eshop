@@ -27,3 +27,60 @@ The first reason would be the application of code testing in the ci.yml also wit
 These actions all apply concepts of CI/CD since the tasks are automatically executed after every push and ensure the quality and reliability of the code. I have also integrated Jacoco with Sonarcloud to get better communication on the code coverage which I have aimed to a 100%. Since I have used meaningful names and clear implementation my wokflows are very readable.
 
 Link to Deployment: https://fixed-panther-davinawuy-faa99f67.koyeb.app/
+
+<h2>Reflection 4</h2>
+
+In this project I managed to apply three principles from the SOLID concept to my project. These were SRP (single responsibility principle), OCP (open/closed principle) and DIP (dependency inversion principle. I applied the SRP when splitting the controller since it began with two controller in one file. This made that file contain two classes and this is not optinal since it maybe prone to unintended changes and issues. Therefore, splitting them was super optimal since it put the responsibility of the controllers to individual files instead of one. I applied DIP by creating an inteface for my repositories. This will help in the code that implement repository since they will use the interface and not the concrete implementation. Finally, I used OCP to help create a generic product class which was then extended by car and product which help promote reusability and ensure consistency.
+
+The advatages of using SOLID are that code is reusable with minor modifications. For example the Car model would have had to been defined and this would mean a new product class will be made. Overtime in bigger projects this will be hard to implement throughly and there will be a lack of consistency. But if we apply SOLID's OCP we can then ensure reusabiblity.
+
+```Java
+package id.ac.ui.cs.advprog.eshop.model;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public abstract class AbstractProduct {
+    private String id;
+    private String name;
+    private int quantity;
+}
+
+package id.ac.ui.cs.advprog.eshop.model;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class Car extends AbstractProduct {
+    private String color;
+}
+
+```
+
+This saves alot of time and code reusability. Another benefit its maintainability and this is found in the implementation of an interface in the use of SRP. It is easier to maintain a code base if the items are seperated. This is seen through the division of the controllers for Car and Product which makes it easier to maintain. By implementing SRP we ensure that the items we update and fix are focused only on that certain section.
+
+Finally, Another benefit is testability, code using SOLID ensure proper testability and this was done through my use of DIP. Since we use the interface instead of the concrete implementation like here:
+
+```Java
+package id.ac.ui.cs.advprog.eshop.repository;
+
+import id.ac.ui.cs.advprog.eshop.model.Car;
+import java.util.Iterator;
+
+public interface CarRepositoryInterface {
+    Car create(Car car);
+    Iterator<Car> findAll();
+    Car findById(String carId);
+    Car update(String carId, Car updatedCar);
+    void delete(String carId);
+}
+```
+
+We can trace issues in the repository then since we know and can narrow down the issues. It is also very reliable when it is applied to many items or classes using DIP for testability will be very productive.
+
+
+The negatives of not using SOLID are that it may make it hard to implement universal changes. This means that if many classes are identical or the same it maybe hard to implement change to each one individually. For example the repository interface are all identical but without the use of OCP it makes modfying each one hard especially in larger projects this will be almost impossible. Another disadvantage of not applying SOLID is that it may be harder to extend or modify classes without changing existing code or implementation. This would have been the case if I did not implement interfaces for my repositories which would force me to change the code in the concrete implementation. Finally, testing will be far more complex without DIP since it will need me to test from the concrete implementation of my repositories which is often slower and harder to scale rather than calling their interfaces.
