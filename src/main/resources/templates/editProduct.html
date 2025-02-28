@@ -10,15 +10,15 @@
     <h3>Edit Product</h3>
     <form th:action="@{/product/edit}" th:object="${product}" method="post">
         <!-- Include a hidden field for productId so the system knows which product to update -->
-        <input type="hidden" th:field="*{productId}" />
+        <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">
             <label for="nameInput">Name</label>
-            <input th:field="*{productName}" type="text" class="form-control mb-4 col-4" id="nameInput" placeholder="Enter product name">
+            <input th:field="*{name}" type="text" class="form-control mb-4 col-4" id="nameInput" placeholder="Enter product name">
         </div>
         <div class="form-group">
             <label for="quantityInput">Quantity</label>
-            <input th:field="*{productQuantity}" type="text" class="form-control mb-4 col-4" id="quantityInput" placeholder="Enter product quantity">
+            <input th:field="*{quantity}" type="text" class="form-control mb-4 col-4" id="quantityInput" placeholder="Enter product quantity">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
