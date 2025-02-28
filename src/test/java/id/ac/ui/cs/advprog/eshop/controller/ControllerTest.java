@@ -46,14 +46,14 @@ class ControllerTest {
     @Test
      void testProductListPage() throws Exception {
         Product product1 = new Product();
-        product1.setProductId(UUID.randomUUID().toString());
-        product1.setProductName("Product One");
-        product1.setProductQuantity(50);
+        product1.setId(UUID.randomUUID().toString());
+        product1.setName("Product One");
+        product1.setQuantity(50);
 
         Product product2 = new Product();
-        product2.setProductId(UUID.randomUUID().toString());
-        product2.setProductName("Product Two");
-        product2.setProductQuantity(100);
+        product2.setId(UUID.randomUUID().toString());
+        product2.setName("Product Two");
+        product2.setQuantity(100);
 
         Mockito.when(service.findAll()).thenReturn(Arrays.asList(product1, product2));
 
@@ -78,9 +78,9 @@ class ControllerTest {
      void testEditProductPage() throws Exception {
         String id = UUID.randomUUID().toString();
         Product product = new Product();
-        product.setProductId(id);
-        product.setProductName("Editable Product");
-        product.setProductQuantity(20);
+        product.setId(id);
+        product.setName("Editable Product");
+        product.setQuantity(20);
 
         Mockito.when(service.findid(id)).thenReturn(product);
 

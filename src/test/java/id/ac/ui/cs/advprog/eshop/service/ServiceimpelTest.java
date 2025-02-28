@@ -26,9 +26,9 @@ import static org.mockito.Mockito.*;
     @Test
      void testCreate() {
         Product product = new Product();
-        product.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
-        product.setProductName("Test Product");
-        product.setProductQuantity(100);
+        product.setId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
+        product.setName("Test Product");
+        product.setQuantity(100);
 
         when(productRepository.create(product)).thenReturn(product);
 
@@ -40,14 +40,14 @@ import static org.mockito.Mockito.*;
     @Test
      void testFindAll() {
         Product product1 = new Product();
-        product1.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
-        product1.setProductName("Product One");
-        product1.setProductQuantity(10);
+        product1.setId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
+        product1.setName("Product One");
+        product1.setQuantity(10);
 
         Product product2 = new Product();
-        product2.setProductId("2");
-        product2.setProductName("Product Two");
-        product2.setProductQuantity(20);
+        product2.setId("2");
+        product2.setName("Product Two");
+        product2.setQuantity(20);
 
         List<Product> productList = new ArrayList<>();
         productList.add(product1);
@@ -73,17 +73,17 @@ import static org.mockito.Mockito.*;
      void testFindidFound() {
         String productId = "fa139fd2-82c1-43f9-9826-943b2b8691a1";
         Product product = new Product();
-        product.setProductId(productId);
-        product.setProductName("Test Product");
-        product.setProductQuantity(100);
+        product.setId(productId);
+        product.setName("Test Product");
+        product.setQuantity(100);
 
         when(productRepository.findid(productId)).thenReturn(product);
 
         Product found = productService.findid(productId);
         verify(productRepository, times(1)).findid(productId);
         assertNotNull(found);
-        assertEquals("Test Product", found.getProductName());
-        assertEquals(100, found.getProductQuantity());
+        assertEquals("Test Product", found.getName());
+        assertEquals(100, found.getQuantity());
     }
 
     @Test
@@ -99,21 +99,21 @@ import static org.mockito.Mockito.*;
     @Test
      void testUpdate() {
         Product original = new Product();
-        original.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
-        original.setProductName("Old Name");
-        original.setProductQuantity(100);
+        original.setId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
+        original.setName("Old Name");
+        original.setQuantity(100);
 
         Product updated = new Product();
-        updated.setProductId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
-        updated.setProductName("New Name");
-        updated.setProductQuantity(200);
+        updated.setId("fa139fd2-82c1-43f9-9826-943b2b8691a1");
+        updated.setName("New Name");
+        updated.setQuantity(200);
 
         when(productRepository.update(original)).thenReturn(updated);
 
         Product result = productService.update(original);
         verify(productRepository, times(1)).update(original);
         assertNotNull(result);
-        assertEquals("New Name", result.getProductName());
-        assertEquals(200, result.getProductQuantity());
+        assertEquals("New Name", result.getName());
+        assertEquals(200, result.getQuantity());
     }
 }
