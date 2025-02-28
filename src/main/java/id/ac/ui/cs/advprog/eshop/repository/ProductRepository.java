@@ -23,13 +23,13 @@ public class ProductRepository implements ProductRepositoryInterface {
 
     @Override
     public void delete(String productId) {
-        productData.removeIf(product -> product.getProductId().equals(productId));
+        productData.removeIf(product -> product.getId().equals(productId));
     }
 
     @Override
     public Product findid(String productId) {
         for (Product product : productData) {
-            if (product.getProductId().equals(productId)) {
+            if (product.getId().equals(productId)) {
                 return product;
             }
         }
@@ -39,7 +39,7 @@ public class ProductRepository implements ProductRepositoryInterface {
     @Override
     public Product update(Product updatedProduct) {
         for (int i = 0; i < productData.size(); i++) {
-            if (productData.get(i).getProductId().equals(updatedProduct.getProductId())) {
+            if (productData.get(i).getId().equals(updatedProduct.getId())) {
                 productData.set(i, updatedProduct);
                 return updatedProduct;
             }
