@@ -100,9 +100,6 @@ I improved her code through the OrderServiceImpl and OrderServiceImplTest by fix
 
 I identified code smells such as returning null instead of throwing an exception when the order already exists, this makes it hard to identify errors and handle them. Incorrect constructor parameters in the code could lead to data inconsistencies are dangerous if left unchecked. Furthermore, I found that the repository's save method was being called unnecessarily when an order already existed. This made the call redundant and dangerous.
 
-
+I refactored the code to throw specific exceptions (IllegalArgumentException and NoSuchElementException) in the scenario that an error does exist instead of returning a null value which is dangerous if left unchanged, making errors clearer. I also corrected constructor parameters in the updateStatus method by ensuring the correct fields were passed, preventing potential data mismatches when updating the status of the order.
 
 Link to Refactor: https://github.com/wuyu0107/ADVShop/tree/REFACTOR/2306172363
-
-
-I refactored the code to throw specific exceptions (IllegalArgumentException and NoSuchElementException) in the scenario that an error does exist instead of returning a null value which is dangerous if left unchanged, making errors clearer. I also corrected constructor parameters in the updateStatus method by ensuring the correct fields were passed, preventing potential data mismatches when updating the status of the order.
