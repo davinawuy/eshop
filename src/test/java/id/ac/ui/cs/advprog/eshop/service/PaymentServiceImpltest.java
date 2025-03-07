@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -157,6 +158,33 @@ class PaymentServiceImpltest {
         verify(paymentRepository, times(1)).getAllPayments();
         assertEquals(payments.size(), all.size());
     }
+    @Test
+    void testCheckStatusWaitingPayment() throws Exception {
+        java.lang.reflect.Method method = PaymentServiceImpl.class.getDeclaredMethod("checkStatus", String.class);
+        method.setAccessible(true);
+        String result = (String) method.invoke(paymentService, PaymentStatus.CHECKING_PAYMENT.name());
+        assertEquals("WAITING_PAYMENT", result);
+    }
 
+    @Test
+    void testCheckStatusInvalidValue() throws Exception {
+        java.lang.reflect.Method method = PaymentServiceImpl.class.getDeclaredMethod("checkStatus", String.class);
+        method.setAccessible(true);
+        InvocationTargetException ex = assertThrows(InvocationTargetException.class, () -> {
+            method.invoke(paymentService, "FOO");
+        });
+        assertTrue(ex.getCause() instanceof IllegalArgumentException);
+    }
+
+    @Test
+    void testSetStatusWithNoLinkedOrder() {
+        Payment payment = payments.get(0); // Use any payment from test data
+        when(orderRepository.findById(payment.getId())).thenReturn(null);
+        when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
+
+        Payment result = paymentService.setStatus(payment, PaymentStatus.SUCCESS.name());
+        verify(orderRepository, never()).save(any(Order.class));
+        assertEquals(PaymentStatus.SUCCESS, result.getStatus());
+    }
 }
 
