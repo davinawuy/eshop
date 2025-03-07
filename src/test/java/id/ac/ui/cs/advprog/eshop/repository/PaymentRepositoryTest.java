@@ -94,6 +94,25 @@ public class PaymentRepositoryTest {
     }
 
     @Test
+    void testVoucherTooLong() {
+        Map<String, String> voucherData = new HashMap<>();
+        // 17 characters instead of 16; should be rejected.
+        voucherData.put("VoucherCode", "ESHOP1234ABC56789");
+        Payment payment = new Payment("PAY019", PaymentMethod.VOUCHER.name(), voucherData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.REJECTED, saved.getStatus());
+    }
+
+    @Test
+    void testVoucherCodeNull() {
+        Map<String, String> voucherData = new HashMap<>();
+        voucherData.put("VoucherCode", null);
+        Payment payment = new Payment("PAY020", PaymentMethod.VOUCHER.name(), voucherData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.REJECTED, saved.getStatus());
+    }
+
+    @Test
     void testCODWithMissingAddress() {
         Map<String, String> noAddress = new HashMap<>();
         noAddress.put("deliveryFee", "12");
@@ -183,5 +202,41 @@ public class PaymentRepositoryTest {
         Payment payment = new Payment("PAY011", PaymentMethod.VOUCHER.name(), voucherData);
         Payment saved = PaymentRepository.save(payment);
         assertEquals(PaymentStatus.SUCCESS, saved.getStatus());
+    }
+    @Test
+    void testVoucherValidMoreDigits() {
+        Map<String, String> voucherData = new HashMap<>();
+        voucherData.put("VoucherCode", "ESHOP123456789AB");
+        Payment payment = new Payment("PAY017", PaymentMethod.VOUCHER.name(), voucherData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.SUCCESS, saved.getStatus());
+    }
+
+    @Test
+    void testVoucherInsufficientDigits() {
+        Map<String, String> voucherData = new HashMap<>();
+        voucherData.put("VoucherCode", "ESHOP12ABCDEFABCD");
+        Payment payment = new Payment("PAY018", PaymentMethod.VOUCHER.name(), voucherData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.REJECTED, saved.getStatus());
+    }
+
+    @Test
+    void testUnknownPaymentMethod() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("randomKey", "randomValue");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Payment("PAY022", "CREDIT_CARD", paymentData);
+        });
+    }
+
+    @Test
+    void testVoucherCodeEmptyString() {
+        Map<String, String> voucherData = new HashMap<>();
+        voucherData.put("VoucherCode", ""); // Empty voucher code
+        Payment payment = new Payment("PAY023", PaymentMethod.VOUCHER.name(), voucherData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.REJECTED, saved.getStatus());
     }
 }

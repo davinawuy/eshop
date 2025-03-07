@@ -16,7 +16,7 @@ public class PaymentRepository {
     public Payment save(Payment payment) {
         if (payment.getMethod() == PaymentMethod.VOUCHER) {
             String code = payment.getPaymentData().get("VoucherCode");
-            if (code != null && code.startsWith("ESHOP") && code.length() == 16) {
+            if (code != null && code.startsWith("ESHOP") && code.length() == 16 && code.replaceAll("[^0-9]", "").length() >= 8) {
                 payment.setStatus(PaymentStatus.SUCCESS);
             } else {
                 payment.setStatus(PaymentStatus.REJECTED);
