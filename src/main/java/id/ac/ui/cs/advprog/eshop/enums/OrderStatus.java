@@ -2,6 +2,9 @@ package id.ac.ui.cs.advprog.eshop.enums;
 
 import lombok.Getter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 public enum OrderStatus {
     WAITING_PAYMENT("WAITING_PAYMENT"),
@@ -11,16 +14,19 @@ public enum OrderStatus {
 
     private final String value;
 
+    private static final Set<String> NAMES = new HashSet<>();
+
+    static {
+        for (OrderStatus orderStatus : OrderStatus.values()) {
+            NAMES.add(orderStatus.name());
+        }
+    }
+
     private OrderStatus(String value) {
         this.value = value;
     }
 
     public static boolean contains(String param) {
-        for (OrderStatus orderStatus : OrderStatus.values()) {
-            if (orderStatus.name().equals(param)) {
-                return true;
-            }
-        }
-        return false;
+        return NAMES.contains(param);
     }
 }
