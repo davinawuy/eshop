@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-
     @Autowired
     private PaymentRepository paymentRepository;
     @Autowired
@@ -22,31 +21,41 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        // TODO: Create and save a new Payment using order, method, and paymentData
-        return null;
+        Payment payment = new Payment(order.getId(), method, paymentData);
+        paymentRepository.save(payment);
+        return payment;
     }
-
     @Override
     public Payment setStatus(Payment payment, String status) {
-        // TODO: Convert status string to PaymentStatus and update Payment
-        // TODO: Update the linked Order's status using checkStatus
-        return null;
+        PaymentStatus pStatus = PaymentStatus.valueOf(status);
+        payment.setStatus(pStatus);
+        paymentRepository.save(payment);
+        Order linkedOrder = orderRepository.findById(payment.getId());
+        if (linkedOrder != null) {
+            linkedOrder.setStatus(checkStatus(payment.getStatus().name()));
+            orderRepository.save(linkedOrder);
+        }        return payment;
     }
-
-    private String checkStatus(String paymentStatus) {
-        // TODO: Map PaymentStatus (SUCCESS, REJECTED, CHECKING_PAYMENT) to corresponding OrderStatus value
-        return null;
+    private String checkStatus(String paymentStatus){
+        if (paymentStatus.equals(PaymentStatus.SUCCESS.name())){
+            return OrderStatus.SUCCESS.getValue();
+        } else if (paymentStatus.equals(PaymentStatus.REJECTED.name())) {
+            return OrderStatus.FAILED.getValue();
+        }
+        else if (paymentStatus.equals(PaymentStatus.CHECKING_PAYMENT.name())) {
+            return OrderStatus.WAITING_PAYMENT.getValue();
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
-
     @Override
     public Payment getPayment(String paymentId) {
-        // TODO: Retrieve and return a Payment by its ID
-        return null;
+        return paymentRepository.getPayment(paymentId);
     }
-
     @Override
     public List<Payment> getAllPayments() {
-        // TODO: Retrieve and return all Payment objects
-        return null;
+        return paymentRepository.getAllPayments();
     }
+
 }
