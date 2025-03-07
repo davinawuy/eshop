@@ -136,4 +136,52 @@ public class PaymentRepositoryTest {
         assertEquals(testPayments.get(1).getPaymentData(), found.getPaymentData());
         assertEquals(testPayments.get(1).getStatus(), found.getStatus());
     }
+
+    @Test
+    void testUpdateExistingPayment() {
+        Payment original = testPayments.get(0);
+        Payment firstSave = PaymentRepository.save(original);
+
+        Map<String, String> updatedData = new HashMap<>(original.getPaymentData());
+        updatedData.put("VoucherCode", "ESHOP11112222333"); // 16 chars: ESHOP(5)+1111(4)+2222(4)+333(3)=16; digits: 1111+2222 = 8 digits
+        Payment updatedPayment = new Payment(original.getId(), original.getMethod().name(), updatedData);
+
+        Payment updatedSave = PaymentRepository.save(updatedPayment);
+
+        Payment retrieved = PaymentRepository.getPayment(original.getId());
+        assertEquals("ESHOP11112222333", retrieved.getPaymentData().get("VoucherCode"));
+        assertEquals(PaymentStatus.SUCCESS, retrieved.getStatus());
+    }
+
+
+    @Test
+    void testDuplicateSaveDoesNotIncreaseListSize() {
+        Payment payment = testPayments.get(0);
+        Payment firstSave = PaymentRepository.save(payment);
+        int sizeAfterFirstSave = PaymentRepository.getAllPayments().size();
+
+        Payment duplicateSave = PaymentRepository.save(payment);
+        int sizeAfterDuplicateSave = PaymentRepository.getAllPayments().size();
+
+        assertEquals(sizeAfterFirstSave, sizeAfterDuplicateSave);
+    }
+
+    @Test
+    void testCODWithNullValue() {
+        Map<String, String> codData = new HashMap<>();
+        codData.put("address", null);
+        codData.put("deliveryFee", "10");
+        Payment payment = new Payment("PAY010", PaymentMethod.COD.name(), codData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.REJECTED, saved.getStatus());
+    }
+
+    @Test
+    void testVoucherValidCode() {
+        Map<String, String> voucherData = new HashMap<>();
+        voucherData.put("VoucherCode", "ESHOP1234ABC5678"); // 16 chars, valid pattern
+        Payment payment = new Payment("PAY011", PaymentMethod.VOUCHER.name(), voucherData);
+        Payment saved = PaymentRepository.save(payment);
+        assertEquals(PaymentStatus.SUCCESS, saved.getStatus());
+    }
 }
