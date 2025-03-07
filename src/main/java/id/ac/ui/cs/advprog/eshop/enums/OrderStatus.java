@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+
 public enum OrderStatus {
     WAITING_PAYMENT("WAITING_PAYMENT"),
     FAILED("FAILED"),
@@ -13,7 +14,7 @@ public enum OrderStatus {
     CANCELLED("CANCELLED");
 
     private final String value;
-
+    // Changing contains Implementation to Set
     private static final Set<String> NAMES = new HashSet<>();
 
     static {
